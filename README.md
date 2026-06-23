@@ -17,3 +17,4 @@ A simple CLI tool for **ethical vulnerability assessment** (learning purposes on
    ```bash
    git clone https://github.com/sibust13/vuln-checker.git
    cd vuln-checker
+pip install -r requirements.txt
