@@ -1,0 +1,81 @@
+4. Click **"Commit changes"** → **"Commit message"** → Type: `Add initial README` → Click **"Commit"**
+
+---
+
+#### ✅ Step 3: Add File 2 (`vuln-checker.py`) (2 minutes max)
+1. In your repo → Click **"Add file"** → **"Upload file"**  
+2. Name the file: `vuln-checker.py`  
+3. **Paste this exact code** (copy from above):  
+```python
+#!/usr/bin/env python3
+"""
+vuln-checker - A simple ethical vulnerability scanner for learning purposes
+
+⚠️ IMPORTANT: 
+- ONLY use this on systems you own or have explicit written permission to test.
+- This tool does NOT scan live systems without authorization.
+- It checks for basic security headers and paths (not full penetration testing).
+
+Usage:
+  python3 vuln-checker.py --url https://example.com
+
+Example:
+  python3 vuln-checker.py --url https://your-own-site.com
+"""
+import sys
+import re
+import requests
+from urllib.parse import urlparse
+
+def check_security_headers(url):
+    """Check for common security headers (educational only)"""
+    try:
+        response = requests.get(url, timeout=5)
+        headers = response.headers
+        # Check for basic headers (e.g., X-Frame-Options)
+        if "X-Frame-Options" not in headers:
+            print(f"⚠️ Missing security header: X-Frame-Options (URL: {url})")
+        if "Content-Security-Policy" not in headers:
+            print(f"⚠️ Missing security header: Content-Security-Policy (URL: {url})")
+        return True
+    except Exception as e:
+        print(f"Error checking headers: {e}")
+        return False
+
+def check_path_scan(url):
+    """Check for common paths (educational only)"""
+    base_url = url
+    paths = ["/", "/login", "/admin", "/api"]
+    for path in paths:
+        try:
+            response = requests.get(f"{base_url}{path}", timeout=5)
+            if response.status_code == 200:
+                print(f"⚠️ Potential path found: {path} (Status: 200)")
+        except Exception:
+            pass
+
+def main():
+    if len(sys.argv) < 3:
+        print("⚠️ Usage: python3 vuln-checker.py --url <target>")
+        print("Example: python3 vuln-checker.py --url https://your-own-site.com")
+        sys.exit(1)
+    
+    # Parse arguments
+    url = sys.argv[2] if len(sys.argv) > 2 else sys.argv[1]
+    
+    # Validate URL
+    try:
+        parsed = urlparse(url)
+        if not parsed.scheme or not parsed.netloc:
+            print("❌ Invalid URL format. Example: https://example.com")
+            sys.exit(1)
+    except:
+        print("❌ Invalid URL format")
+        sys.exit(1)
+
+    print(f"🔍 Scanning: {url}")
+    check_security_headers(url)
+    check_path_scan(url)
+
+if __name__ == "__main__":
+    main()
