@@ -18,3 +18,5 @@ A simple CLI tool for **ethical vulnerability assessment** (learning purposes on
    git clone https://github.com/sibust13/vuln-checker.git
    cd vuln-checker
 pip install -r requirements.txt
+
+python3 vuln-checker.py --url https://your-own-site.com
